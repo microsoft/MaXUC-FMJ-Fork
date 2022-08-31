@@ -1,0 +1,47 @@
+<project name="fmj" default="jar-fmj" basedir=".">
+    <dirname property="fmj.root" file="${ant.file.fmj}"/>
+    <property name="project.name" value="fmj"/>
+    <property name="fmj.javac.out" location="${fmj.root}/build/classes" />
+    <property name="fmj.jar.out" location="${fmj.root}/build/jars" />
+
+    <!-- Java version to use. -->
+    <property name="javac.source" value="11"/>
+    <property name="javac.target" value="11"/>
+
+    <target name="jar-fmj" depends="clean,build-fmj,jar" />
+
+    <target name="build-fmj" description="compile java source for fmj">
+        <mkdir dir="${fmj.javac.out}"/>
+        <javac debug="true"
+               optimize="true"
+               destdir="${fmj.javac.out}"
+               source="${javac.source}"
+               target="${javac.target}">
+            <exclude name="**/RTPSourceStreamTest.java"/>
+            <exclude name="**/PlayGSM.java"/>
+            <src path="${fmj.root}/src"/>
+            <src path="${fmj.root}/src.rtp"/>
+            <src path="${fmj.root}/src.ejmf"/>
+            <src path="${fmj.root}/src.stubs"/>
+            <src path="${fmj.root}/src.sunibm.base"/>
+            <src path="${fmj.root}/src.sunibm.replace"/>
+            <src path="${fmj.root}/src.utils"/>
+        </javac>
+    </target>
+
+    <!-- Create a jar of FMJ, excluding test classes -->
+    <target name="jar" depends="build-fmj">
+        <mkdir dir="${fmj.jar.out}" />
+        <jar jarfile="${fmj.jar.out}/fmj.jar">
+            <fileset dir="${fmj.javac.out}">
+                <exclude name="net/sf/fmj/test/*" />
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- clean the slate -->
+    <target name="clean">
+        <delete dir="${fmj.javac.out}"/>
+        <delete dir="${fmj.jar.out}"/>
+    </target>
+</project>
