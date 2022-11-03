@@ -11,7 +11,6 @@ import java.util.logging.*;
 import net.sf.fmj.utility.*;
 
 import javax.media.*;
-//import javax.media.format.*;
 
 /**
  * Encapsulates format information for video data. The attributes of a
