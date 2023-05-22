@@ -1,3 +1,4 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
 package com.lti.utils;
 
 import java.util.logging.*;

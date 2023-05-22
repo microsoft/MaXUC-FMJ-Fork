@@ -1,3 +1,5 @@
+<!-- Portions (c) Microsoft Corporation. All rights reserved. -->
+
 <project name="fmj" default="jar-fmj" basedir=".">
     <dirname property="fmj.root" file="${ant.file.fmj}"/>
     <property name="project.name" value="fmj"/>

@@ -1,3 +1,8 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
+/**
+ * This file is historically created by splitting an open source file into
+ * multiple files
+ */
 package net.sf.fmj.media.rtp;
 
 import javax.media.*;

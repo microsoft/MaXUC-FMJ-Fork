@@ -1,3 +1,5 @@
+<!-- Portions (c) Microsoft Corporation. All rights reserved. -->
+
 # FMJ
 FMJ supports movie and audio file playback, as well as viewing of
 video from a capture device, on Windows, Mac OS X, and

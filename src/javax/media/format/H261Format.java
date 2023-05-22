@@ -1,3 +1,4 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
 package javax.media.format;
 
 import javax.media.*;

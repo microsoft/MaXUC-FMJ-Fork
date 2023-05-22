@@ -1,3 +1,4 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
 package net.sf.fmj.ejmf.toolkit.media;
 
 import java.util.*;

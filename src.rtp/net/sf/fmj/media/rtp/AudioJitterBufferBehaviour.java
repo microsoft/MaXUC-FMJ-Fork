@@ -1,3 +1,8 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
+/**
+ * This file is historically created by splitting an open source file into
+ * multiple files
+ */
 package net.sf.fmj.media.rtp;
 
 import javax.media.*;
@@ -97,7 +102,7 @@ class AudioJitterBufferBehaviour
      * <tt>0</tt> indicates that the respective packet was accepted
      * normally, a <tt>1</tt> indicates that it was dropped because it was
      * received too late. The storage of the <tt>history</tt> is circular
-     * and {@link #historyPointer} always points to the last packet added.
+     * and {@link #historyTail} always points to the last packet added.
      */
     private byte[] history;
 

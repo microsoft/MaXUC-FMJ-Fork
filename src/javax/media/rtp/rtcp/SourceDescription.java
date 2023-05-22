@@ -1,3 +1,4 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
 package javax.media.rtp.rtcp;
 
 import java.net.*;

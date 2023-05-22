@@ -9,6 +9,7 @@
  *
  */
 
+// Portions (c) Microsoft Corporation. All rights reserved.
 package net.sf.fmj.media.datasink.file;
 
 import java.io.File;

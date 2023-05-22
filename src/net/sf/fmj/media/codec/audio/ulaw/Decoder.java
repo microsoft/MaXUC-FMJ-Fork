@@ -1,3 +1,4 @@
+// Portions (c) Microsoft Corporation. All rights reserved.
 package net.sf.fmj.media.codec.audio.ulaw;
 
 import java.util.logging.*;
