@@ -7,6 +7,7 @@ import javax.media.*;
 import javax.media.rtp.*;
 import javax.media.rtp.rtcp.*;
 
+import net.sf.fmj.media.Log;
 import net.sf.fmj.media.protocol.rtp.*;
 import net.sf.fmj.media.rtp.util.*;
 
@@ -237,25 +238,35 @@ public abstract class SSRCInfo implements Report
             if (chunk.items[ci].type == 1)
                 break;
 
-        String s = new String(chunk.items[ci].data);
+        String chunkCName = new String(chunk.items[ci].data);
         String sourceinfocname = null;
         if (sourceInfo != null)
             sourceinfocname = sourceInfo.getCNAME();
-        if (sourceInfo != null && !s.equals(sourceinfocname))
+        if (sourceInfo != null && !chunkCName.equals(sourceinfocname))
         {
-            sourceInfo.removeSSRC(this);
-            sourceInfo = null;
+            // The following two lines caused an issue where a change in the cname
+            // stops the currently connected Datasource and RTPSourceStream
+            // and they are not restarted properly, causing all new packets that arrive
+            // not to be processed by the streams
+            // sourceInfo.removeSSRC(this);
+            // sourceInfo = null;
+
+            // The CNAME is a property that defines the session (the SSRC identifies the stream)
+            // so we can just update the RTPSourceInfo that keeps track of this information
+            // instead of stopping the relevant streams
+            Log.info("Updating CNAME property");
+            sourceInfo.updateCname(chunkCName);
         }
         if (sourceInfo == null)
         {
-            sourceInfo = cache.sourceInfoCache.get(s, ours);
+            sourceInfo = cache.sourceInfoCache.get(chunkCName, ours);
             sourceInfo.addSSRC(this);
         }
         if (chunk.items.length > 1)
         {
             for (int i = 0; i < chunk.items.length; i++)
             {
-                s = new String(chunk.items[i].data);
+                chunkCName = new String(chunk.items[i].data);
                 switch (chunk.items[i].type)
                 {
                 default:
@@ -263,51 +274,51 @@ public abstract class SSRCInfo implements Report
 
                 case 2: // '\002'
                     if (name == null)
-                        name = new SourceDescription(2, s, 0, false);
+                        name = new SourceDescription(2, chunkCName, 0, false);
                     else
-                        name.setDescription(s);
+                        name.setDescription(chunkCName);
                     break;
 
                 case 3: // '\003'
                     if (email == null)
-                        email = new SourceDescription(3, s, 0, false);
+                        email = new SourceDescription(3, chunkCName, 0, false);
                     else
-                        email.setDescription(s);
+                        email.setDescription(chunkCName);
                     break;
 
                 case 4: // '\004'
                     if (phone == null)
-                        phone = new SourceDescription(4, s, 0, false);
+                        phone = new SourceDescription(4, chunkCName, 0, false);
                     else
-                        phone.setDescription(s);
+                        phone.setDescription(chunkCName);
                     break;
 
                 case 5: // '\005'
                     if (loc == null)
-                        loc = new SourceDescription(5, s, 0, false);
+                        loc = new SourceDescription(5, chunkCName, 0, false);
                     else
-                        loc.setDescription(s);
+                        loc.setDescription(chunkCName);
                     break;
 
                 case 6: // '\006'
                     if (tool == null)
-                        tool = new SourceDescription(6, s, 0, false);
+                        tool = new SourceDescription(6, chunkCName, 0, false);
                     else
-                        tool.setDescription(s);
+                        tool.setDescription(chunkCName);
                     break;
 
                 case 7: // '\007'
                     if (note == null)
-                        note = new SourceDescription(7, s, 0, false);
+                        note = new SourceDescription(7, chunkCName, 0, false);
                     else
-                        note.setDescription(s);
+                        note.setDescription(chunkCName);
                     break;
 
                 case 8: // '\b'
                     if (priv == null)
-                        priv = new SourceDescription(8, s, 0, false);
+                        priv = new SourceDescription(8, chunkCName, 0, false);
                     else
-                        priv.setDescription(s);
+                        priv.setDescription(chunkCName);
                     break;
                 }
             }

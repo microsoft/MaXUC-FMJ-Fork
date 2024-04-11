@@ -289,6 +289,8 @@ public class Handler extends BasicDataSink implements SourceTransferHandler,
                     {
                         pathName = pathName.replace('/', '\\');
                     }
+                    // Path sanitised from PII - used for logs
+                    String sanitisedPath = sanitiseFilePath(pathName);
 
                     // In jdk1.2, RandomAccessFile has a useful method called
                     // setLength() which can be used to truncate an existing
@@ -298,7 +300,7 @@ public class Handler extends BasicDataSink implements SourceTransferHandler,
                     // On Windows, you cannot delete a file if some process
                     // is using it.
                     //
-                    Log.comment("Path=" + pathName);
+                    Log.comment("Path=" + sanitisedPath);
 
                     file = new File(pathName);
                     if (file.exists())
@@ -307,14 +309,14 @@ public class Handler extends BasicDataSink implements SourceTransferHandler,
                         if (!deleteFile(file))
                         {
                             System.err.println("datasink open: Existing file "
-                                    + pathName
+                                    + sanitisedPath
                                     + " cannot be deleted. Check if "
                                     + "some other process is using "
                                     + " this file");
                             if (push)
                                 ((PushSourceStream) stream)
                                         .setTransferHandler(null);
-                            throw new IOException("Existing file " + pathName
+                            throw new IOException("Existing file " + sanitisedPath
                                     + " cannot be deleted");
                         }
                     }
@@ -364,7 +366,7 @@ public class Handler extends BasicDataSink implements SourceTransferHandler,
                         Log.comment("IO Exception " + e);
                         System.err
                                 .println("datasink open: IOException when creating RandomAccessFile "
-                                        + pathName + " : " + e);
+                                        + sanitisedPath + " : " + e);
                         if (push)
                             ((PushSourceStream) stream)
                                     .setTransferHandler(null);
@@ -381,6 +383,31 @@ public class Handler extends BasicDataSink implements SourceTransferHandler,
                 ((PushSourceStream) stream).setTransferHandler(null);
             }
         }
+    }
+
+    /**
+     * Removes PII from any filepath(s) in a string by removing the username.
+     *
+     * Eg "C:\Users\USERNAME\folder;C:\Users\USERNAME" will be
+     * replaced with "C:\Users\<redacted>\folder;C:\Users\<redacted>"
+     *
+     * If passed something where the username is the last part of the filepath, any following
+     * information will be eaten up to the next delimiter
+     * example: "C:\Users\USERNAME is a file path" will become "C:\Users\<redacted>"
+     *
+     * @param stringToSanitise The string to be treated.
+     * @return A string with the relevant PII removed
+     */
+    private String sanitiseFilePath(String stringToSanitise)
+    {
+        if (stringToSanitise == null) {
+            return null;
+        }
+        // replace anything following the string "users/" or "users\" (case
+        // insensitive) up to the next /\;:
+        // \\\\ makes one \ as you have to escape \ once in regex, and each \
+        // once in java
+        return stringToSanitise.replaceAll("(?i)(?<=users[/\\\\])[^/\\\\;:]+", "<redacted>");
     }
 
     // Asynchronous write thread

@@ -81,6 +81,11 @@ public abstract class RTPSourceInfo implements Participant
         return ssrc.length;
     }
 
+    public void updateCname(String newCname)
+    {
+        this.cname.setDescription(newCname);
+    }
+
     @Override
     public Vector<SSRCInfo> getStreams()
     {
