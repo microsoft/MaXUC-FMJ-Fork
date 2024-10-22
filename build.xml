@@ -17,6 +17,7 @@
         <javac debug="true"
                optimize="true"
                destdir="${fmj.javac.out}"
+               includeantruntime="false"
                source="${javac.source}"
                target="${javac.target}">
             <exclude name="**/RTPSourceStreamTest.java"/>

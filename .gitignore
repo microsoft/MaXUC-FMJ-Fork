@@ -32,3 +32,6 @@ build/*
 *.iws
 *.ipr
 .idea/
+
+# VSCode project files
+.vscode/

@@ -6,7 +6,7 @@ video from a capture device, on Windows, Mac OS X, and
 Linux.
 
 # Requirements
-- Java 11
+- Java 17
 
 # Directories.
 Not all directories are in the release.
