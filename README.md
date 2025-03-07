@@ -1,5 +1,7 @@
 <!-- Portions (c) Microsoft Corporation. All rights reserved. -->
 
+This repository is now archived as Microsoft no longer support MaX UC Clients.
+
 # FMJ
 FMJ supports movie and audio file playback, as well as viewing of
 video from a capture device, on Windows, Mac OS X, and
